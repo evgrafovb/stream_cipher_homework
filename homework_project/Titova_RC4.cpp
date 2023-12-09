@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+//Алгоритм шифрования RC4
 vector<unsigned char> RC4_Cipher(vector<unsigned char> text, vector<unsigned char> key)
 {
     vector<unsigned char> cipher_text;
@@ -32,6 +33,12 @@ vector<unsigned char> RC4_Cipher(vector<unsigned char> text, vector<unsigned cha
     }
     return cipher_text;
 }
+//Дешифрование зашифрованного алгоритма
+vector<unsigned char> RC4_Decipher(vector<unsigned char> cipher_text, vector<unsigned char> key)
+{
+    return RC4_Cipher(cipher_text, key); 
+}
+
 int main
 {
 	return 0;
