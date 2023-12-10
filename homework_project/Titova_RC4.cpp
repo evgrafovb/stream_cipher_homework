@@ -1,71 +1,68 @@
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
+
 //Алгоритм шифрования RC4
-vector<unsigned char> RC4_Cipher(vector<unsigned char> text, vector<unsigned char> key)
+void RC4_Cipher(vector<string>& text, const string& key)
 {
-    vector<unsigned char> cipher_text;
-    vector<unsigned char> S(256);
-    vector<unsigned char> T(256);
+    vector<int> S(256);
+    int i = 0, j = 0;
 
-    for (int i = 0; i < 256; i++)
+    for (int k = 0; k < 256; k++)
     {
-        S[i] = i;
-        T[i] = key[i % key.size()];
+        S[k] = k;
     }
 
-    int j = 0;
-    for (int i = 0; i < 256; i++)
+    for (int k = 0; k < 256; k++)
     {
-        j = (j + S[i] + T[i]) % 256;
-        swap(S[i], S[j]);
+        j = (j + S[k] + key[k % key.size()]) % 256;
+        swap(S[k], S[j]);
     }
 
-    int i = 0;
+    i = 0;
     j = 0;
-    for (unsigned char byte: text)
+    for (auto& str : text)
     {
-        i = (i + 1) % 256;
-        j = (j + S[i]) % 256;
-        swap(S[i], S[j]);
-        int t = (S[i] + S[j]) % 256;
-        cipher_text.push_back(byte ^ S[t]);
+        for (char& c : str)
+        {
+            i = (i + 1) % 256;
+            j = (j + S[i]) % 256;
+            swap(S[i], S[j]);
+            c ^= S[(S[i] + S[j]) % 256];
+        }
     }
-    return cipher_text;
 }
 //Дешифрование зашифрованного алгоритма
-vector<unsigned char> RC4_Decipher(vector<unsigned char> cipher_text, vector<unsigned char> key)
+void RC4_Decipher(vector<string>& text, const string& key)
 {
-    return RC4_Cipher(cipher_text, key); 
+    RC4_Cipher(text, key); 
 }
 
-int main
+/*int main()
 {
-    vector<unsigned char> text = { 'H', 'e', 'l', 'l', 'o', ',', ' ', 'w', 'o', 'r', 'l', 'd', '!' };
-    vector<unsigned char> key = { 'c', 'i', 'p', 'h', 'e', 'r' };
-    vector<unsigned char> cipher_text = RC4_Cipher(text, key);
-    vector<unsigned char> decipher_text = RC4_Decipher(cipher_text, key);
+    vector<string> text = {"Hello, world!"};
+    string key = "cipher";
 
     cout << "Text: ";
-    for (unsigned char byte: text)
+    for (const auto& str : text)
     {
-        cout << byte;
+        cout << str << endl;
     }
-    cout << endl;
 
+    RC4_Cipher(text, key);
     cout << "Cipher_text: ";
-    for (unsigned char byte: cipher_text)
+    for (const auto& str : text)
     {
-        cout << byte;
+        cout << str << endl;
     }
-    cout << endl;
-
+    
+    RC4_Decipher(text, key);
     cout << "Decipher_text: ";
-    for (unsigned char byte: decipher_text)
+    for (const auto& str : text)
     {
-        cout << byte;
+        cout << str << endl;
     }
-    cout << endl;
 
 	return 0;
-}
+}*/
