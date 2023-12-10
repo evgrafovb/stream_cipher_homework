@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "A51Cipher.h"
 
 using namespace std;
 
@@ -12,5 +13,12 @@ int main()
 	string plaintext;
 	getline(cin, plaintext);
 
+	A51Cipher cipher(key, frame);
+	string ciphertext = cipher.encrypt(plaintext);
+
 	cout << "Encrypted Text: ";
+	for (char c : ciphertext) {
+		cout << hex << (int)c << " ";
+	}
+	return 0;
 }
