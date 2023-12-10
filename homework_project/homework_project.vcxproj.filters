@@ -21,5 +21,8 @@
     <ClCompile Include="Titova_RC4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="A5_gerasimova.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

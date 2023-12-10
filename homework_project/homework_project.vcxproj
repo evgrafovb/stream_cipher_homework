@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="A5_gerasimova.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Titova_RC4.cpp" />
   </ItemGroup>
