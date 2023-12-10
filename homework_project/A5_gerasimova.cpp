@@ -11,4 +11,6 @@ int main()
 	cout << "Enter a Text: ";
 	string plaintext;
 	getline(cin, plaintext);
+
+	cout << "Encrypted Text: ";
 }
