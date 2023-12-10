@@ -1,9 +1,16 @@
 #include "A51Cipher.h"
 #include <fstream>
 #include <string>
+#include <cstdlib> // Для std::strtol
 
-A51Cipher::A51Cipher(unsigned long long key, unsigned long long frame)
-{
+
+A51Cipher::A51Cipher(unsigned long long key, unsigned long long frame) {
+    initializeCipher(key, frame);
+}
+
+// Инициализация регистров R1, R2, R3 с ключом и номером кадра
+void A51Cipher::initializeCipher(unsigned long long key, unsigned long long frame) {
+
     for (int i = 0; i < 64; ++i) {
         R1[18 - (i % 19)] = (key >> i) & 1;
         R2[21 - (i % 22)] = (key >> i) & 1;
@@ -18,12 +25,13 @@ A51Cipher::A51Cipher(unsigned long long key, unsigned long long frame)
         clockWithMajority();
     }
 }
-
+// Определение большинственного бита
 bool A51Cipher::majorityBit() const
 {
     return (R1[8] + R2[10] + R3[10]) >= 2;
 }
 
+//Тактирование регистров с учетом большинственного бита
 void A51Cipher::clockWithMajority() {
     bool majority = majorityBit();
     if (R1[8] == majority) {
@@ -43,6 +51,7 @@ void A51Cipher::clockWithMajority() {
     }
 }
 
+// Генерация байта ключевого потока
 char A51Cipher::getKeystreamByte() {
     char keystream = 0;
     for (int i = 0; i < 8; ++i) {
@@ -53,6 +62,7 @@ char A51Cipher::getKeystreamByte() {
     return keystream;
 }
 
+// Шифрование текста
 string A51Cipher::encrypt(const string& plaintext) {
     string ciphertext;
     for (char c : plaintext) {
@@ -60,4 +70,29 @@ string A51Cipher::encrypt(const string& plaintext) {
         ciphertext += c ^ keystream;
     }
     return ciphertext;
+}
+
+
+// Дешифрование текста
+string A51Cipher::decrypt(const string& ciphertext) {
+    string plaintext;
+    for (char c : ciphertext) {
+        char keystream = getKeystreamByte();
+        plaintext += c ^ keystream;
+    }
+    return plaintext;
+}
+
+void A51Cipher::setKey(unsigned long long newKey, unsigned long long newFrame) {
+    initializeCipher(newKey, newFrame);
+}
+
+string A51Cipher::hexStringToBytes(const string& hexString) {
+    string bytes;
+    for (size_t i = 0; i < hexString.length(); i += 2) {
+        string byteString = hexString.substr(i, 2);
+        char byte = static_cast<char>(strtol(byteString.c_str(), nullptr, 16));
+        bytes.push_back(byte);
+    }
+    return bytes;
 }
