@@ -35,5 +35,8 @@
     <ClInclude Include="A51Cipher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="algos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
