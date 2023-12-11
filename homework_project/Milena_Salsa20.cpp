@@ -63,6 +63,59 @@ void salsa20Encrypt(uint8_t* plaintext, size_t plaintextLength, const uint8_t* k
     }
 }
 
+void salsa20Decrypt(uint8_t* ciphertext, size_t ciphertextLength, const uint8_t* key, const uint8_t* nonce) {
+    uint32_t state[16] = {
+        0x61707865, 0x3320646e, 0x79622d32, 0x6b206574,
+        *reinterpret_cast<const uint32_t*>(key),
+        *reinterpret_cast<const uint32_t*>(key + 4),
+        *reinterpret_cast<const uint32_t*>(key + 8),
+        *reinterpret_cast<const uint32_t*>(key + 12),
+        0,
+        *reinterpret_cast<const uint32_t*>(nonce),
+        *reinterpret_cast<const uint32_t*>(nonce + 4),
+        0,
+        0,
+        1,
+        0,
+        1
+    };
+
+    uint32_t block[16];
+
+    while (ciphertextLength > 0) {
+        memcpy(block, state, sizeof(block));
+
+        for (int i = 0; i < 10; ++i) {
+            quarterRound(block[0], block[4], block[8], block[12]);
+            quarterRound(block[5], block[9], block[13], block[1]);
+            quarterRound(block[10], block[14], block[2], block[6]);
+            quarterRound(block[15], block[3], block[7], block[11]);
+            quarterRound(block[0], block[1], block[2], block[3]);
+            quarterRound(block[5], block[6], block[7], block[4]);
+            quarterRound(block[10], block[11], block[8], block[9]);
+            quarterRound(block[15], block[12], block[13], block[14]);
+        }
+
+        for (int i = 0; i < 16; ++i) {
+            block[i] += state[i];
+        }
+
+        for (int i = 0; i < 16; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                ciphertext[i * 4 + j] ^= block[i] >> (8 * j);
+            }
+        }
+
+        state[8]++;
+        if (state[8] == 0) {
+            state[9]++;
+        }
+
+        ciphertext += 64;
+        ciphertextLength -= 64;
+    }
+}
+
 //int main() {
 //    const uint8_t key[32] = {
 //        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
@@ -96,6 +149,15 @@ void salsa20Encrypt(uint8_t* plaintext, size_t plaintextLength, const uint8_t* k
 //
 //    std::cout << std::endl;
 //
+//    salsa20Decrypt(plaintext, sizeof(plaintext), key, nonce);
 //
+//    std::cout << "Decrypted message: ";
+//
+//    for (int i = 0; i < sizeof(plaintext); ++i) {
+//        std::cout << plaintext[i];
+//    }
+//
+//    std::cout << std::endl;
+// 
 //    return 0;
 //}
