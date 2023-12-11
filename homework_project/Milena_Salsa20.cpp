@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstdint>
 #include <cstring>
+#include <string>
+
+using namespace std;
 
 void quarterRound(uint32_t& a, uint32_t& b, uint32_t& c, uint32_t& d) {
     b ^= ((a + d) << 7) | ((a + d) >> (32 - 7));
@@ -9,7 +12,7 @@ void quarterRound(uint32_t& a, uint32_t& b, uint32_t& c, uint32_t& d) {
     a ^= ((d + c) << 18) | ((d + c) >> (32 - 18));
 }
 
-void salsa20Encrypt(uint8_t* plaintext, size_t plaintextLength, const uint8_t* key, const uint8_t* nonce) {
+string salsa20Encrypt(uint8_t* plaintext, size_t plaintextLength, const uint8_t* key, const uint8_t* nonce) {
     uint32_t state[16] = {
         0x61707865, 0x3320646e, 0x79622d32, 0x6b206574,
         *reinterpret_cast<const uint32_t*>(key),
@@ -61,9 +64,19 @@ void salsa20Encrypt(uint8_t* plaintext, size_t plaintextLength, const uint8_t* k
         plaintext += 64;
         plaintextLength -= 64;
     }
+    string text = "Encrypted message:\n";
+    //std::cout << "Encrypted message: ";
+    
+        for (int i = 0; i < sizeof(plaintext); ++i) {
+            //std::cout << plaintext[i];
+            text += plaintext[i];
+        }
+        text += "\n";
+
+        return text;
 }
 
-void salsa20Decrypt(uint8_t* ciphertext, size_t ciphertextLength, const uint8_t* key, const uint8_t* nonce) {
+string salsa20Decrypt(uint8_t* ciphertext, size_t ciphertextLength, const uint8_t* key, const uint8_t* nonce) {
     uint32_t state[16] = {
         0x61707865, 0x3320646e, 0x79622d32, 0x6b206574,
         *reinterpret_cast<const uint32_t*>(key),
@@ -90,6 +103,7 @@ void salsa20Decrypt(uint8_t* ciphertext, size_t ciphertextLength, const uint8_t*
             quarterRound(block[5], block[9], block[13], block[1]);
             quarterRound(block[10], block[14], block[2], block[6]);
             quarterRound(block[15], block[3], block[7], block[11]);
+
             quarterRound(block[0], block[1], block[2], block[3]);
             quarterRound(block[5], block[6], block[7], block[4]);
             quarterRound(block[10], block[11], block[8], block[9]);
@@ -114,6 +128,17 @@ void salsa20Decrypt(uint8_t* ciphertext, size_t ciphertextLength, const uint8_t*
         ciphertext += 64;
         ciphertextLength -= 64;
     }
+
+    string text = "Decrypted message:\n";
+    //std::cout << "Decrypted message: ";
+    
+    for (int i = 0; i < sizeof(ciphertext); ++i) {
+        //std::cout << ciphertext[i];
+        text += ciphertext[i];
+    }
+    
+    //std::cout << std::endl;
+    return text;
 }
 
 //int main() {
