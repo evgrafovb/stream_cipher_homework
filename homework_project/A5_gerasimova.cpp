@@ -25,7 +25,7 @@ public:
     static string hexStringToBytes(const string& hexString);
 };
 
-// Здесь добавьте реализацию методов класса A51Cipher, как в вашем исходном файле A5Cipher.cpp
+
 A51Cipher::A51Cipher(unsigned long long key, unsigned long long frame) {
     initializeCipher(key, frame);
 }
