@@ -5,6 +5,7 @@
 
 using namespace std;
 
+
 class A51Cipher {
 private:
     bitset<19> R1;
@@ -143,3 +144,4 @@ int main() {
 
     return 0;
 }
+
