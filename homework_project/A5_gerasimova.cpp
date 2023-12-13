@@ -9,13 +9,13 @@ bitset<19> R1;
 bitset<22> R2;
 bitset<23> R3;
 
-void initializeCipher(unsigned long long key, unsigned long long frame);
-bool majorityBit();
-void clockWithMajority();
-char getKeystreamByte();
-string encrypt(const string& plaintext);
-string decrypt(const string& ciphertext);
-string hexStringToBytes(const string& hexString);
+//void initializeCipher(unsigned long long key, unsigned long long frame);
+//bool majorityBit();
+//void clockWithMajority();
+//char getKeystreamByte();
+//string encrypt(const string& plaintext);
+//string decrypt(const string& ciphertext);
+//string hexStringToBytes(const string& hexString);
 
 
 // Инициализация регистров R1, R2, R3 с ключом и номером кадра
