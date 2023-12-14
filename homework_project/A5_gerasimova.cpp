@@ -100,30 +100,3 @@ string hexStringToBytes(const string& hexString) {
     }
     return bytes; // Возвращаем строку байтов
 }
-
-
-//int main() {
-//    unsigned long long key = 0x1234567890ABCDEF; // 64-bit key
-//    unsigned long long frame = 0x134; // Frame number
-//
-//    initializeCipher(key, frame);
-//
-//    cout << "Enter a Text: ";
-//    string plaintext;
-//    getline(cin, plaintext);
-//
-//    // Шифрование текста
-//    string ciphertext = encrypt(plaintext);
-//    cout << "Encrypted Text: ";
-//    for (char c : ciphertext) {
-//        cout << hex << (int)(unsigned char)c << "";
-//    }
-//    cout << endl;
-//
-//    // Дешифрование зашифрованного текста
-//    initializeCipher(key, frame);
-//    string decryptedText = decrypt(ciphertext);
-//    cout << "Decrypted Text: " << decryptedText << endl;
-//
-//    return 0;
-//}
