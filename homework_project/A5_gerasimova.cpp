@@ -66,6 +66,9 @@ char getKeystreamByte() {
 
 // Шифрование текста
 string encrypt(const string& plaintext) {
+    unsigned long long key = 0x1234567890ABCDEF; // 64-bit key
+    unsigned long long frame = 0x134; // Frame number
+    initializeCipher(key, frame);
     string ciphertext;
     for (char c : plaintext) {
         char keystream = getKeystreamByte();
@@ -77,6 +80,9 @@ string encrypt(const string& plaintext) {
 
 // Дешифрование текста
 string decrypt(const string& ciphertext) {
+    unsigned long long key = 0x1234567890ABCDEF; // 64-bit key
+    unsigned long long frame = 0x134; // Frame number
+    initializeCipher(key, frame);
     string plaintext;
     for (char c : ciphertext) {
         char keystream = getKeystreamByte();
