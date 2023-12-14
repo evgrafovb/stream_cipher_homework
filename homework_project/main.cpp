@@ -66,23 +66,14 @@ void testing_Salsa20(uint8_t* text) {
 }
 
 int main() {
-	
-	vector<string> text1 = { "Hello, world! :) RC4 is a symmetric key stream cipher..." };
+	vector<string> text1_RC4 = { "Hello, world! :) RC4 is a symmetric key stream cipher..." };
 	string keyRC4 = "1*&^567WoRd";
-	testing_RC4(text1, keyRC4);
+	testing_RC4(text1_RC4, keyRC4);
 
-	const uint8_t key[32] = {
-		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-		0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
-		0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
-		0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f
-	};
+	string text1_A5 = "Hello, world! :) A5 is a symmetric key stream cipher...";
+	testing_A5(text1_A5);
 
-	const uint8_t nonce[8] = {
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	};
-
-	uint8_t plaintext[64] = {
+	uint8_t text1_Salsa20[64] = {
 		'H', 'e', 'l', 'l', 'o', ',', ' ', 'w',
 		'o', 'r', 'l', 'd', '!', ' ', ':', ')',
 		'S', 'a', 'l', 's', 'a', '2', '0', ' ',
@@ -92,6 +83,6 @@ int main() {
 		'm', ' ', 'c', 'i', 'p', 'h', 'e', 'r',
 		'.', '.', '.'
 	};
-	//testing_Salsa20(plaintext);
+	//testing_Salsa20(text1_Salsa20);
 	return 0;
 }
