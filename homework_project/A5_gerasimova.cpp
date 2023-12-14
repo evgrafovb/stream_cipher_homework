@@ -1,49 +1,132 @@
 #include <iostream>
-#include "A51Cipher.h"
+#include <bitset>
 #include <string>
+#include <cstdlib> // Для std::strtol
 
 using namespace std;
 
-//int main() {
-//    unsigned long long key = 0x1234567890ABCDEF; // 64-bit key
-//    unsigned long long frame = 0x134; // Frame number
-//
-//    /* unsigned long long key, frame;
-//     cout << "Enter new key: ";
-//     cin >> key;
-//     cout << "Enter new frame number: ";
-//     cin >> frame;
-//
-//     cin.ignore(); // Очистить буфер
-//     */
-//
-//     // Создание экземпляра шифра с введенными ключом и номером кадра
-//    A51Cipher cipher(key, frame);
-//
-//    // Шифрование текста
-//    cout << "Enter a Text: ";
-//    string plaintext;
-//    getline(cin, plaintext);
-//
-//
-//    string ciphertext = cipher.encrypt(plaintext);
-//    cout << "Encrypted Text: ";
-//    for (char c : ciphertext) {
-//        cout << hex << (int)(unsigned char)c << "";
-//    }
-//    cout << endl;
-//
-//    // Ввод зашифрованного текста для дешифрования
-//    cout << "Enter Encrypted Text to Decrypt: ";
-//    string encryptedText;
-//    getline(cin, encryptedText);
-//
-//    string hexToDecrypt = A51Cipher::hexStringToBytes(encryptedText);
-//
-//    // Дешифрование зашифрованного текста
-//    cipher.setKey(key, frame); // Переустановка ключа перед дешифрованием
-//    string decryptedText = cipher.decrypt(hexToDecrypt);
-//    cout << "Decrypted Text: " << decryptedText << endl;
-//
-//    return 0;
-//}
+bitset<19> R1;
+bitset<22> R2;
+bitset<23> R3;
+
+//void initializeCipher(unsigned long long key, unsigned long long frame);
+//bool majorityBit();
+//void clockWithMajority();
+//char getKeystreamByte();
+//string encrypt(const string& plaintext);
+//string decrypt(const string& ciphertext);
+//string hexStringToBytes(const string& hexString);
+
+
+// Инициализация регистров R1, R2, R3 с ключом и номером кадра
+void initializeCipher(unsigned long long key, unsigned long long frame) {
+
+    for (int i = 0; i < 64; ++i) {
+        R1[18 - (i % 19)] = (key >> i) & 1;
+        R2[21 - (i % 22)] = (key >> i) & 1;
+        R3[22 - (i % 23)] = (key >> i) & 1;
+    }
+    for (int i = 0; i < 22; ++i) {
+        R1[18 - (i % 19)] = R1[18 - (i % 19)] ^ (frame >> i) & 1;
+        R2[21 - (i % 22)] = R2[21 - (i % 22)] ^ (frame >> i) & 1;
+        R3[22 - (i % 23)] = R3[22 - (i % 23)] ^ (frame >> i) & 1;
+    }
+    for (int i = 0; i < 100; ++i) {
+        clockWithMajority();
+    }
+}
+
+// Определение большинственного бита
+bool majorityBit()
+{
+    return (R1[8] + R2[10] + R3[10]) >= 2;
+}
+
+//Тактирование регистров с учетом большинственного бита
+void clockWithMajority() {
+    bool majority = majorityBit();
+    if (R1[8] == majority) {
+        bool new_bit = R1[13] ^ R1[16] ^ R1[17] ^ R1[18];
+        R1 >>= 1;
+        R1[18] = new_bit;
+    }
+    if (R2[10] == majority) {
+        bool new_bit = R2[20] ^ R2[21];
+        R2 >>= 1;
+        R2[21] = new_bit;
+    }
+    if (R3[10] == majority) {
+        bool new_bit = R3[7] ^ R3[20] ^ R3[21] ^ R3[22];
+        R3 >>= 1;
+        R3[22] = new_bit;
+    }
+}
+
+// Генерация байта ключевого потока
+char getKeystreamByte() {
+    char keystream = 0;
+    for (int i = 0; i < 8; ++i) {
+        clockWithMajority();
+        bool bit = R1[18] ^ R2[21] ^ R3[22];
+        keystream |= (bit << i);
+    }
+    return keystream;
+}
+
+// Шифрование текста
+string encrypt(const string& plaintext) {
+    string ciphertext;
+    for (char c : plaintext) {
+        char keystream = getKeystreamByte();
+        ciphertext += c ^ keystream;
+    }
+    return ciphertext;
+}
+
+
+// Дешифрование текста
+string decrypt(const string& ciphertext) {
+    string plaintext;
+    for (char c : ciphertext) {
+        char keystream = getKeystreamByte();
+        plaintext += c ^ keystream;
+    }
+    return plaintext;
+}
+
+string hexStringToBytes(const string& hexString) {
+    string bytes;
+    for (size_t i = 0; i < hexString.length(); i += 2) {
+        string byteString = hexString.substr(i, 2); // Извлекаем два символа
+        char byte = static_cast<char>(strtol(byteString.c_str(), nullptr, 16)); // Преобразуем их в число
+        bytes.push_back(byte); // Добавляем число в конец строки байтов
+    }
+    return bytes; // Возвращаем строку байтов
+}
+
+
+int main() {
+    unsigned long long key = 0x1234567890ABCDEF; // 64-bit key
+    unsigned long long frame = 0x134; // Frame number
+
+    initializeCipher(key, frame);
+
+    cout << "Enter a Text: ";
+    string plaintext;
+    getline(cin, plaintext);
+
+    // Шифрование текста
+    string ciphertext = encrypt(plaintext);
+    cout << "Encrypted Text: ";
+    for (char c : ciphertext) {
+        cout << hex << (int)(unsigned char)c << "";
+    }
+    cout << endl;
+
+    // Дешифрование зашифрованного текста
+    initializeCipher(key, frame);
+    string decryptedText = decrypt(ciphertext);
+    cout << "Decrypted Text: " << decryptedText << endl;
+
+    return 0;
+}
