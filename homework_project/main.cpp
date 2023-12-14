@@ -26,35 +26,43 @@ void testing_RC4(vector<string>& text, const string& key) {
 	cout << endl << endl;
 }
 
-//void testing_A5(const string& text) {
-//	cout << "A5 cipher algorithm" << endl;
-//	auto start1 = std::chrono::system_clock::now();
-//	auto result1 = ;
-//	auto end1 = std::chrono::system_clock::now();
-//	auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(end1 - start1);
-//	cout << duration1 << endl;
-//	cout << "RC4 decipher algorithm" << endl;
-//	auto start2 = std::chrono::system_clock::now();
-//	auto result2 = RC4_Decipher(text, key);
-//	auto end2 = std::chrono::system_clock::now();
-//	auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end2 - start2);
-//	cout << duration2 << endl;
-//
-//}
+void testing_A5(const string& text) {
+	cout << "A5 TESTING" << endl << endl;
+	cout << "Text: " << text << endl;
+	auto start1 = std::chrono::system_clock::now();
+	auto result1 = encrypt(text);
+	auto end1 = std::chrono::system_clock::now();
+	cout << "Encrypted text: " << result1 << endl;
+	auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(end1 - start1);
+	cout << "TIME: " << duration1.count() << " mcs" << endl;
+	auto start2 = std::chrono::system_clock::now();
+	auto result2 = decrypt(result1);
+	auto end2 = std::chrono::system_clock::now();
+	cout << "Decrypted text: " << result2 << endl;
+	auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end2 - start2);
+	cout << "TIME: " << duration2.count() << " mcs" << endl;
+	cout << endl << endl;
+}
 
 void testing_Salsa20(uint8_t* text) {
-	cout << "Salsa20 cipher algorithm" << endl;
+	cout << "Salsa20 TESTING" << endl << endl;
+	cout << "Text: ";
+	for (int i = 0; i < sizeof(text); ++i) {
+		cout << text[i];
+	}
 	auto start1 = std::chrono::system_clock::now();
 	auto result1 = salsa20Encrypt(text);
 	auto end1 = std::chrono::system_clock::now();
+	cout << "Encrypted text: " << result1 << endl;
 	auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(end1 - start1);
-	cout << duration1.count() << " mcs" << endl;
-	cout << "Salsa20 decipher algorithm" << endl;
+	cout << "TIME: " << duration1.count() << " mcs" << endl;
 	auto start2 = std::chrono::system_clock::now();
 	auto result2 = salsa20Decrypt(text);
 	auto end2 = std::chrono::system_clock::now();
+	cout << "Decrypted text: " << result2 << endl;
 	auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end2 - start2);
-	cout << duration2.count() << " mcs" << endl;
+	cout << "TIME: " << duration2.count() << " mcs" << endl;
+	cout << endl << endl;
 }
 
 int main() {
