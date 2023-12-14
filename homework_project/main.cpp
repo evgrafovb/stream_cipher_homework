@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <chrono>
-#include "A51Cipher.h"
 #include "algos.h"
 
 using namespace std;
@@ -37,16 +36,16 @@ void testing_RC4(vector<string>& text, const string& key) {
 //
 //}
 
-void testing_Salsa20(uint8_t* text, size_t plaintextLength, const uint8_t* key, const uint8_t* nonce) {
+void testing_Salsa20(uint8_t* text) {
 	cout << "Salsa20 cipher algorithm" << endl;
 	auto start1 = std::chrono::system_clock::now();
-	auto result1 = salsa20Encrypt(text, sizeof(text), key, nonce);
+	auto result1 = salsa20Encrypt(text);
 	auto end1 = std::chrono::system_clock::now();
 	auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(end1 - start1);
 	cout << duration1.count() << " mcs" << endl;
 	cout << "Salsa20 decipher algorithm" << endl;
 	auto start2 = std::chrono::system_clock::now();
-	auto result2 = salsa20Decrypt(text, sizeof(text), key, nonce);
+	auto result2 = salsa20Decrypt(text);
 	auto end2 = std::chrono::system_clock::now();
 	auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end2 - start2);
 	cout << duration2.count() << " mcs" << endl;
@@ -79,6 +78,6 @@ int main() {
 		'm', ' ', 'c', 'i', 'p', 'h', 'e', 'r',
 		'.', '.', '.'
 	};
-	testing_Salsa20(plaintext, sizeof(plaintext), key, nonce);
+	//testing_Salsa20(plaintext);
 	return 0;
 }

@@ -24,17 +24,11 @@
     <ClCompile Include="A5_gerasimova.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="A51Cipher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Milena_Salsa20.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="A51Cipher.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="algos.h">
       <Filter>Header Files</Filter>
     </ClInclude>

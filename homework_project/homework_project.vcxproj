@@ -128,14 +128,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="A51Cipher.cpp" />
     <ClCompile Include="A5_gerasimova.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Milena_Salsa20.cpp" />
     <ClCompile Include="Titova_RC4.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="A51Cipher.h" />
     <ClInclude Include="algos.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

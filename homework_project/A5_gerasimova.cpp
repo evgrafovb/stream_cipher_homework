@@ -9,33 +9,6 @@ bitset<19> R1;
 bitset<22> R2;
 bitset<23> R3;
 
-//void initializeCipher(unsigned long long key, unsigned long long frame);
-//bool majorityBit();
-//void clockWithMajority();
-//char getKeystreamByte();
-//string encrypt(const string& plaintext);
-//string decrypt(const string& ciphertext);
-//string hexStringToBytes(const string& hexString);
-
-
-// Инициализация регистров R1, R2, R3 с ключом и номером кадра
-void initializeCipher(unsigned long long key, unsigned long long frame) {
-
-    for (int i = 0; i < 64; ++i) {
-        R1[18 - (i % 19)] = (key >> i) & 1;
-        R2[21 - (i % 22)] = (key >> i) & 1;
-        R3[22 - (i % 23)] = (key >> i) & 1;
-    }
-    for (int i = 0; i < 22; ++i) {
-        R1[18 - (i % 19)] = R1[18 - (i % 19)] ^ (frame >> i) & 1;
-        R2[21 - (i % 22)] = R2[21 - (i % 22)] ^ (frame >> i) & 1;
-        R3[22 - (i % 23)] = R3[22 - (i % 23)] ^ (frame >> i) & 1;
-    }
-    for (int i = 0; i < 100; ++i) {
-        clockWithMajority();
-    }
-}
-
 // Определение большинственного бита
 bool majorityBit()
 {
@@ -59,6 +32,24 @@ void clockWithMajority() {
         bool new_bit = R3[7] ^ R3[20] ^ R3[21] ^ R3[22];
         R3 >>= 1;
         R3[22] = new_bit;
+    }
+}
+
+// Инициализация регистров R1, R2, R3 с ключом и номером кадра
+void initializeCipher(unsigned long long key, unsigned long long frame) {
+
+    for (int i = 0; i < 64; ++i) {
+        R1[18 - (i % 19)] = (key >> i) & 1;
+        R2[21 - (i % 22)] = (key >> i) & 1;
+        R3[22 - (i % 23)] = (key >> i) & 1;
+    }
+    for (int i = 0; i < 22; ++i) {
+        R1[18 - (i % 19)] = R1[18 - (i % 19)] ^ (frame >> i) & 1;
+        R2[21 - (i % 22)] = R2[21 - (i % 22)] ^ (frame >> i) & 1;
+        R3[22 - (i % 23)] = R3[22 - (i % 23)] ^ (frame >> i) & 1;
+    }
+    for (int i = 0; i < 100; ++i) {
+        clockWithMajority();
     }
 }
 
@@ -105,28 +96,28 @@ string hexStringToBytes(const string& hexString) {
 }
 
 
-int main() {
-    unsigned long long key = 0x1234567890ABCDEF; // 64-bit key
-    unsigned long long frame = 0x134; // Frame number
-
-    initializeCipher(key, frame);
-
-    cout << "Enter a Text: ";
-    string plaintext;
-    getline(cin, plaintext);
-
-    // Шифрование текста
-    string ciphertext = encrypt(plaintext);
-    cout << "Encrypted Text: ";
-    for (char c : ciphertext) {
-        cout << hex << (int)(unsigned char)c << "";
-    }
-    cout << endl;
-
-    // Дешифрование зашифрованного текста
-    initializeCipher(key, frame);
-    string decryptedText = decrypt(ciphertext);
-    cout << "Decrypted Text: " << decryptedText << endl;
-
-    return 0;
-}
+//int main() {
+//    unsigned long long key = 0x1234567890ABCDEF; // 64-bit key
+//    unsigned long long frame = 0x134; // Frame number
+//
+//    initializeCipher(key, frame);
+//
+//    cout << "Enter a Text: ";
+//    string plaintext;
+//    getline(cin, plaintext);
+//
+//    // Шифрование текста
+//    string ciphertext = encrypt(plaintext);
+//    cout << "Encrypted Text: ";
+//    for (char c : ciphertext) {
+//        cout << hex << (int)(unsigned char)c << "";
+//    }
+//    cout << endl;
+//
+//    // Дешифрование зашифрованного текста
+//    initializeCipher(key, frame);
+//    string decryptedText = decrypt(ciphertext);
+//    cout << "Decrypted Text: " << decryptedText << endl;
+//
+//    return 0;
+//}
