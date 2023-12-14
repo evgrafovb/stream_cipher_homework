@@ -6,18 +6,24 @@
 using namespace std;
 
 void testing_RC4(vector<string>& text, const string& key) {
-	cout << "RC4 cipher algorithm" << endl;
+	cout << "RC4 TESTING" << endl << endl;
+	cout << "Text: ";
+	for (string& str : text) {
+		cout << str;
+	}
 	auto start1 = std::chrono::system_clock::now();
 	auto result1 = RC4_Cipher(text, key);
 	auto end1 = std::chrono::system_clock::now();
+	cout << "\nEncrypted text: " << result1 << endl;
 	auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(end1 - start1);
-	cout << duration1.count() << " mcs" << endl;
-	cout << "RC4 decipher algorithm" << endl;
+	cout << "TIME: " << duration1.count() << " mcs" << endl;
 	auto start2 = std::chrono::system_clock::now();
 	auto result2 = RC4_Decipher(text, key);
 	auto end2 = std::chrono::system_clock::now();
+	cout << "Decrypted text: " << result2 << endl;
 	auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end2 - start2);
-	cout << duration2.count() << " mcs" << endl;
+	cout << "TIME: " << duration2.count() << " mcs" << endl;
+	cout << endl << endl;
 }
 
 //void testing_A5(const string& text) {
