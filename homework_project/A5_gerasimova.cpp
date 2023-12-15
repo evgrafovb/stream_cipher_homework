@@ -36,7 +36,7 @@ void clockWithMajority() {
 }
 
 // Инициализация регистров R1, R2, R3 с ключом и номером кадра
-void initializeCipher(unsigned long long key, unsigned long long frame) {
+void initializeCipher(unsigned long long& key, unsigned long long& frame) {
 
     for (int i = 0; i < 64; ++i) {
         R1[18 - (i % 19)] = (key >> i) & 1;
@@ -65,8 +65,7 @@ char getKeystreamByte() {
 }
 
 // Шифрование текста
-string encrypt(const string& plaintext) {
-    unsigned long long key = 0x1234567890ABCDEF; // 64-bit key
+string encrypt(string& plaintext, unsigned long long& key) {
     unsigned long long frame = 0x134; // Frame number
     initializeCipher(key, frame);
     string ciphertext;
@@ -79,8 +78,7 @@ string encrypt(const string& plaintext) {
 
 
 // Дешифрование текста
-string decrypt(const string& ciphertext) {
-    unsigned long long key = 0x1234567890ABCDEF; // 64-bit key
+string decrypt(string& ciphertext, unsigned long long& key) {
     unsigned long long frame = 0x134; // Frame number
     initializeCipher(key, frame);
     string plaintext;
